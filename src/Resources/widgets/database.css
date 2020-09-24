@@ -1,0 +1,93 @@
+body .phpdebugbar-widgets-ngyuki-database,
+body .phpdebugbar-widgets-ngyuki-database *  {
+    box-sizing: border-box;
+    line-height: 1.5;
+    font-size: 13px;
+}
+
+body .phpdebugbar-widgets-ngyuki-database {
+    height: 100%;
+    overflow: scroll;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-stmt {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid #ccc;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-headline {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 4px;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-headline > * {
+    margin: 0 4px;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-headline > a {
+    text-decoration: underline;
+    color: steelblue;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-sql {
+    flex-grow: 1;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-stat {
+    color: #888;
+}
+
+.phpdebugbar-widgets-ngyuki-database .phpdebugbar-fa-table:before ,
+.phpdebugbar-widgets-ngyuki-database .phpdebugbar-fa-clock-o:before ,
+.phpdebugbar-widgets-ngyuki-database .phpdebugbar-fa-cogs:before {
+    font-family: PhpDebugbarFontAwesome, monospace;
+    margin-right: 4px;
+    font-size: 12px;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-stmt > .phpdebugbar-widgets-ngyuki-database-collapse {
+    margin: 0 16px 8px;
+    display: none;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-stmt > .phpdebugbar-widgets-ngyuki-database-collapse * {
+    font-size: 12px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-stmt th,
+body .phpdebugbar-widgets-ngyuki-database-stmt td {
+    padding: 4px 12px;
+    border: 1px solid #ccc;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-stmt th {
+    width: 1%;
+    min-width: 32px;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-stmt li {
+    padding: 4px 12px;
+    border: 1px solid #ccc;
+}
+body .phpdebugbar-widgets-ngyuki-database-stmt li + li {
+    border-top: none;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-backtrace code {
+    color: #444;
+}
+
+body .phpdebugbar-widgets-ngyuki-database-backtrace span {
+    color: #88c;
+}
+
+body a.phpdebugbar-widgets-ngyuki-database-error-link,
+body .phpdebugbar-widgets-ngyuki-database-error {
+    color: #f44;
+}
