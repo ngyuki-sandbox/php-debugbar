@@ -6,6 +6,7 @@ namespace App\Component\DebugBar\Example;
 require __DIR__ . '/../vendor/autoload.php';
 
 use App\Component\DebugBar\DataCollector\DatabaseCollector;
+use App\Component\DebugBar\DataCollector\ServiceWorkerCollector;
 use App\Component\DebugBar\DataCollector\SettingDataCollector;
 use App\Component\DebugBar\Integration\DoctrineSQLLogger;
 use App\Component\DebugBar\Integration\ExtendsPdo;
@@ -46,6 +47,11 @@ $debugbar->addCollector(
 $debugbar->addCollector(new ConfigCollector(['foo' => 'bar'], 'AppConfig'));
 $debugbar->addCollector(new SettingDataCollector());
 $debugbar->addCollector($exceptionsCollector = new ExceptionsCollector());
+
+$debugbar->addCollector(new ServiceWorkerCollector());
+$debugbar->getJavascriptRenderer()->setBindAjaxHandlerToFetch(false);
+$debugbar->getJavascriptRenderer()->setBindAjaxHandlerToJquery(false);
+$debugbar->getJavascriptRenderer()->setBindAjaxHandlerToXHR(false);
 
 $debugbar->setStorage(new GarbageableFileStorage(__DIR__ . '/../data/'));
 
@@ -211,6 +217,13 @@ $routes['get']['/doctrine'] = function () use ($renderer, $databaseCollector, $t
     assert($num == 2);
 
     return $renderer();
+};
+
+$routes['get']['/download'] = function () use ($messagesCollector) : ResponseInterface {
+    $messagesCollector->addMessage('download now');
+    return new Response\TextResponse('download now', 200, [
+        'content-disposition' => 'attachment; filename=download.txt'
+    ]);
 };
 
 $pipeline->pipe(new CallableMiddlewareDecorator(

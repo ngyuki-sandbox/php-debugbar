@@ -46,6 +46,11 @@ class DebugbarMiddleware implements MiddlewareInterface
      */
     private $useAjaxCapture = true;
 
+    /**
+     * @var bool
+     */
+    private $useAttachmentCapture = true;
+
     public function __construct(
         DebugBar $debugbar,
         ResponseFactoryInterface $responseFactory,
@@ -74,6 +79,12 @@ class DebugbarMiddleware implements MiddlewareInterface
         return $this;
     }
 
+    public function useAttachmentCapture(bool $useAttachmentCapture)
+    {
+        $this->useAttachmentCapture = $useAttachmentCapture;
+        return $this;
+    }
+
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $res = $this->handleAsset($request);
@@ -97,6 +108,13 @@ class DebugbarMiddleware implements MiddlewareInterface
 
         if ($this->useAjaxCapture) {
             $res = $this->handleAjax($request, $response);
+            if ($res) {
+                return $res;
+            }
+        }
+
+        if ($this->useAttachmentCapture) {
+            $res = $this->handleAttachment($response);
             if ($res) {
                 return $res;
             }
@@ -159,6 +177,7 @@ class DebugbarMiddleware implements MiddlewareInterface
             $response = $response->withoutHeader('Pragma');
         }
 
+        $response = $response->withHeader('Service-Worker-Allowed', '/');
         return $response;
     }
 
@@ -193,18 +212,35 @@ class DebugbarMiddleware implements MiddlewareInterface
     private function handleAjax(ServerRequestInterface $request, ResponseInterface $response): ?ResponseInterface
     {
         if (strtolower($request->getHeaderLine('X-Requested-With')) === 'xmlhttprequest') {
-            if ($this->debugbar->isDataPersisted()) {
-                $this->debugbar->getData();
-                $response = $response->withHeader('phpdebugbar-id', $this->debugbar->getCurrentRequestId());
-            } else {
-                $headers = $this->debugbar->getDataAsHeaders();
-                foreach ($headers as $name => $value) {
-                    $response = $response->withHeader($name, $value);
-                }
-            }
-            return $response;
+            return $this->injectHeader($response, 'ajax');
         }
         return null;
+    }
+
+    private function handleAttachment(ResponseInterface $response): ?ResponseInterface
+    {
+        $disposition = $response->getHeaderLine('Content-Disposition');
+        list($disposition) = explode(';', $disposition, 2);
+        $disposition = strtolower(trim($disposition));
+        if ($disposition === 'attachment') {
+            return $this->injectHeader($response, 'attachment');
+        }
+        return null;
+    }
+
+    private function injectHeader(ResponseInterface $response, string $type): ResponseInterface
+    {
+        $response = $response->withHeader('phpdebugbar-type', $type);
+        if ($this->debugbar->isDataPersisted()) {
+            $this->debugbar->getData();
+            $response = $response->withHeader('phpdebugbar-id', $this->debugbar->getCurrentRequestId());
+        } else {
+            $headers = $this->debugbar->getDataAsHeaders();
+            foreach ($headers as $name => $value) {
+                $response = $response->withHeader($name, $value);
+            }
+        }
+        return $response;
     }
 
     private function handleHtml(ResponseInterface $response): ?ResponseInterface

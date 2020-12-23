@@ -7,12 +7,14 @@
 <body id="body">
     <div>
         <form method="get" action="/">
-            <button data-ajax="/ajax">Ajax</button>
+            <button data-jquery="/ajax">jQuery</button>
+            <button data-fetch="/ajax">fetch</button>
             <button formmethod="post">POST</button>
             <button formaction="/pdo">PDO</button>
             <button formaction="/doctrine">Doctrine</button>
             <button formaction="/exception">Exception</button>
             <button data-ajax="/exception">Ajax Exception</button>
+            <button formaction="/download">Download</button>
         </form>
     </div>
     <?php if (isset($exception) && $exception instanceof Throwable): ?>
@@ -21,11 +23,20 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         $(() => {
-            $(document).on('click', '[data-ajax]', async (ev) => {
+            $(document).on('click', '[data-jquery]', async (ev) => {
                 ev.preventDefault();
-                const url = ev.currentTarget.getAttribute('data-ajax');
+                const url = ev.currentTarget.getAttribute('data-jquery');
                 try {
                     await $.get(url);
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+            $(document).on('click', '[data-fetch]', async (ev) => {
+                ev.preventDefault();
+                const url = ev.currentTarget.getAttribute('data-fetch');
+                try {
+                    await fetch(url, { headers: { 'X-Requested-With': 'xmlhttprequest' }});
                 } catch (err) {
                     console.error(err);
                 }
