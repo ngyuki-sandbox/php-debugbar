@@ -38,6 +38,14 @@ class GarbageableFileStorage extends FileStorage
         file_put_contents($this->makeFilename($id), json_encode($data));
     }
 
+    public function find(array $filters = array(), $max = 20, $offset = 0)
+    {
+        // Deprecated:
+        //   usort(): Returning bool from comparison function is deprecated, return an integer less than, equal to, or greater than zero
+        //   in vendor/maximebf/debugbar/src/DebugBar/Storage/FileStorage.php on line 66
+        return @parent::find($filters, $max, $offset);
+    }
+
     public function setGcParam(int $maxLifetime, int $divisor, int $probability)
     {
         $this->maxLifetime = $maxLifetime;

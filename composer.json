@@ -2,25 +2,33 @@
     "license": "MIT",
     "config": {
         "platform": {
-            "php": "7.2"
+            "php": "7.4"
         },
         "preferred-install": "dist",
         "sort-packages": true
     },
     "require": {
-        "php": "^7.2",
-        "maximebf/debugbar": "^1.16"
+        "php": "^7.4",
+        "ext-json": "*",
+        "ext-pdo": "*",
+        "maximebf/debugbar": "^1.18",
+        "php-di/php-di": "^6.4"
     },
     "require-dev": {
-        "doctrine/dbal": "^2.10",
-        "laminas/laminas-diactoros": "^2.4",
-        "laminas/laminas-httphandlerrunner": "^1.2",
-        "laminas/laminas-stratigility": "^3.2",
-        "psalm/phar": "^3.16"
+        "doctrine/dbal": "^3.3",
+        "laminas/laminas-diactoros": "^2.10",
+        "laminas/laminas-httphandlerrunner": "^2.1",
+        "laminas/laminas-stratigility": "^3.5",
+        "psalm/phar": "^4.23"
     },
     "autoload": {
         "psr-4": {
             "App\\Component\\DebugBar\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\": "app/"
         }
     }
 }

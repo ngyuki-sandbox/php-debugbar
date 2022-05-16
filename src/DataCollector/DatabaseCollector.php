@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Component\DebugBar\DataCollector;
 
-use App\Component\DebugBar\Database\ProfiledStatement;
+use App\Component\DebugBar\Utils\ProfiledStatement;
 use DebugBar\DataCollector\AssetProvider;
 use DebugBar\DataCollector\DataCollector;
 use DebugBar\DataCollector\Renderable;
@@ -78,6 +78,7 @@ class DatabaseCollector extends DataCollector implements Renderable, AssetProvid
                 'params'        => $stmt->params,
                 'row_count'     => $stmt->rowCount,
                 'duration_str'  => $stmt->duration !== null ? $formatter->formatDuration($stmt->duration) : null,
+                // @phan-suppress-next-line PhanTypeMismatchArgument
                 'memory_str'    => $stmt->memory !== null ? $formatter->formatBytes($stmt->memory) : null,
                 'backtrace'     => $this->collectBacktrace($stmt->backtrace),
                 'explain'       => $this->collectExplain($stmt),
@@ -194,7 +195,7 @@ class DatabaseCollector extends DataCollector implements Renderable, AssetProvid
         return [
             $name => [
                 'tooltip' => 'database',
-                'widget'  => 'PhpDebugBar.Widgets.ngyuki.Database',
+                'widget'  => 'PhpDebugBar.Widgets.Ritz.Database',
                 'map'     => $name,
                 'default' => '[]',
             ],
@@ -208,10 +209,10 @@ class DatabaseCollector extends DataCollector implements Renderable, AssetProvid
     public function getAssets()
     {
         return [
-            'base_path' => __DIR__ . '/../Resources/widgets',
-            'base_url'  => '/vendor/ngyuki/php-debugbar/widgets',
-            'css'       => 'database.css',
-            'js'        => 'database.js'
+            'base_path' => __DIR__ . '/../Resources',
+            'base_url'  => '/vendor/ritz/php-debugbar/Resources',
+            'css'       => 'widgets/database.css',
+            'js'        => 'widgets/database.js'
         ];
     }
 }

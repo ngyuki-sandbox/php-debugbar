@@ -13,7 +13,7 @@
             <button formaction="/pdo">PDO</button>
             <button formaction="/doctrine">Doctrine</button>
             <button formaction="/exception">Exception</button>
-            <button data-ajax="/exception">Ajax Exception</button>
+            <button data-jquery="/exception">Ajax Exception</button>
             <button formaction="/download">Download</button>
         </form>
     </div>

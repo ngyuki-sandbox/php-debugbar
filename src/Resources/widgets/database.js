@@ -1,6 +1,6 @@
 (function($) {
 
-    const className = 'phpdebugbar-widgets-ngyuki-database';
+    const className = 'phpdebugbar-widgets-ritz-database';
 
     const template = `
         <div class="${className}-stmt">
@@ -36,8 +36,8 @@
         </div>
     `;
 
-    PhpDebugBar.Widgets.ngyuki = PhpDebugBar.Widgets.ngyuki || {};
-    PhpDebugBar.Widgets.ngyuki.Database = PhpDebugBar.Widget.extend({
+    PhpDebugBar.Widgets.Ritz = PhpDebugBar.Widgets.Ritz || {};
+    PhpDebugBar.Widgets.Ritz.Database = PhpDebugBar.Widget.extend({
 
         className: className,
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Component\DebugBar\Database;
+namespace App\Component\DebugBar\Utils;
 
 class ProfiledStatement
 {

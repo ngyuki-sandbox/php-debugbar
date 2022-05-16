@@ -68,10 +68,10 @@ class SettingDataCollector extends DataCollector implements Renderable, AssetPro
     function getAssets()
     {
         return [
-            'base_path' => __DIR__ . '/../Resources/widgets',
-            'base_url'  => '/vendor/ngyuki/php-debugbar/widgets',
-            'css'       => 'setting.css',
-            'js'        => 'setting.js'
+            'base_path' => __DIR__ . '/../Resources',
+            'base_url'  => '/vendor/ritz/php-debugbar/Resources',
+            'css'       => 'widgets/setting.css',
+            'js'        => 'widgets/setting.js'
         ];
     }
 }

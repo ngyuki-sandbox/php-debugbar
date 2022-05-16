@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Component\DebugBar\Integration;
+namespace App\Component\DebugBar\Bridge\Pdo;
 
-use App\Component\DebugBar\Database\ProfilingStatementStart;
 use App\Component\DebugBar\DataCollector\DatabaseCollector;
 use App\Component\DebugBar\Utils\BacktraceFilter;
+use App\Component\DebugBar\Utils\ProfilingStatementStart;
 use PDO;
 use PDOStatement;
 use Throwable;
@@ -35,35 +35,35 @@ class ExtendsPdo extends PDO
         return $this;
     }
 
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         return $this->callProfiling('BEGIN', [], function () {
             return parent::beginTransaction();
         });
     }
 
-    public function commit()
+    public function commit(): bool
     {
         return $this->callProfiling(strtoupper(__FUNCTION__), [], function () {
             return parent::commit();
         });
     }
 
-    public function rollBack()
+    public function rollBack(): bool
     {
         return $this->callProfiling(strtoupper(__FUNCTION__), [], function () {
             return parent::rollBack();
         });
     }
 
-    public function exec($statement)
+    public function exec(string $statement): int | false
     {
         return $this->callProfiling($statement, [], function () use ($statement) {
             return parent::exec($statement);
         });
     }
 
-    public function query(string $statement, ?int $fetchMode = null, mixed ...$fetchModeArgs)
+    public function query($statement, $mode = PDO::ATTR_DEFAULT_FETCH_MODE, ...$fetch_mode_args): PDOStatement | false
     {
         $args = func_get_args();
         return $this->callProfiling($statement, [], function () use ($args) {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Component\DebugBar\Integration;
+namespace App\Component\DebugBar\Bridge\Pdo;
 
 use PDO;
 use PDOStatement;
@@ -23,21 +23,21 @@ class ExtendsPdoStatement extends PDOStatement
         $this->pdo = $pdo;
     }
 
-    public function bindParam($parameter, &$variable, $data_type = PDO::PARAM_STR, $length = null, $driver_options = null)
+    public function bindParam($parameter, &$variable, $data_type = PDO::PARAM_STR, $length = null, $driver_options = null): bool
     {
         $this->params[$parameter] = $variable;
         $args = [$parameter, &$variable] + func_get_args();
         return call_user_func_array(['parent', __FUNCTION__], $args);
     }
 
-    public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR)
+    public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR): bool
     {
         $this->params[$parameter] = $value;
         $args = func_get_args();
         return call_user_func_array(['parent', __FUNCTION__], $args);
     }
 
-    public function execute($input_parameters = null)
+    public function execute($input_parameters = null): bool
     {
         $params = $this->params;
         if (is_array($input_parameters)) {

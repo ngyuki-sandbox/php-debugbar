@@ -1,18 +1,20 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Component\DebugBar\Integration;
+namespace App\Component\DebugBar\Bridge\Doctrine;
 
-use App\Component\DebugBar\Database\ProfilingStatementStart;
 use App\Component\DebugBar\DataCollector\DatabaseCollector;
 use App\Component\DebugBar\Utils\BacktraceFilter;
+use App\Component\DebugBar\Utils\ProfilingStatementStart;
 use DebugBar\DataCollector\TimeDataCollector;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Logging\SQLLogger;
-use PDO;
 use Throwable;
 
-class DoctrineSQLLogger implements SQLLogger
+/**
+ * @phan-suppress PhanDeprecatedInterface
+ */
+class SqlLoggerBridge implements SQLLogger
 {
     /**
      * @var Connection
@@ -72,6 +74,7 @@ class DoctrineSQLLogger implements SQLLogger
             return;
         }
 
+        // Doctrine の SQLLogger だと $rowCount や $error は採取できない
         $profiled = $this->profiling->end();
         $this->profiling = null;
 
@@ -88,7 +91,7 @@ class DoctrineSQLLogger implements SQLLogger
         $this->connection->getConfiguration()->setSQLLogger(null);
         try {
             $stmt = $this->connection->executeQuery("EXPLAIN $sql", $params);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $stmt->fetchAllAssociative();
         } catch (Throwable $ex) {
             return [[
                 'exception' => get_class($ex),
